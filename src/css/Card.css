@@ -1,0 +1,21 @@
+.card1{
+    margin: 10px auto; /* Added /
+    float: none; / Added /
+    margin-bottom: 10px; / Added */
+    width: 50rem;
+}
+.hadding{
+    text-align: center;
+
+}
+
+.hadding_bottom{
+    width: 50%;
+    margin: 10px auto;
+    display: inherit;
+    border-bottom: 3px solid rgb(97, 97, 97);
+}
+.data_container .form_data{
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
