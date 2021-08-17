@@ -1,5 +1,5 @@
 import React,{useState} from 'react';
-import Form1 from './Form';
+import Form from './Form';
 
 import '../css/Card.css';
 const Card = () => {
@@ -17,7 +17,7 @@ const [fetchData,setFetchData]  = useState('');
                 <h1>Task Manager</h1>
                 <div className="hadding_bottom"></div>
                     <div className="data_container">
-                        <Form1 data={getData}/>
+                        <Form data={getData}/>
                        
                     </div>
                     <div className="card">

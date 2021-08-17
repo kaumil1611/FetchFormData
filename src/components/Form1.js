@@ -39,10 +39,7 @@ const Form1 = (props) => {
     
    const submitHandler =(e) =>{
         e.preventDefault();
-        console.log(userGender);
-
-
-
+        
         const allData = {
             name: userName,
             email: userEmail,
@@ -66,8 +63,8 @@ const Form1 = (props) => {
     setUserMobile('');
     setUserAge('');
     setUserCountry(null);
-    setUserGender('');
-    setCheckGender('');
+    setUserGender(null);
+    setCheckGender(false);
     setUserHobby('');
     
     setUserPassword('');
@@ -97,14 +94,14 @@ const Form1 = (props) => {
                 <input className="form-control form-control-lg form_data"  type="text" onChange={(e) => setUserName(e.target.value)} value={userName} placeholder="Add User Name" />
                 <input className="form-control form-control-lg form_data"  type="email" onChange={(e) => setUserEmail(e.target.value)} value={userEmail} placeholder="Add User Email" />
                
-                <input type="tel" className="form-control form-control-lg form_data" onChange={(e) => setUserMobile(e.target.value)} value={userMobile} placeholder="enter your name" title="Error Message" pattern="[1-9]{1}[0-9]{9}" />
+                <input type="tel" className="form-control form-control-lg form_data" onChange={(e) => setUserMobile(e.target.value)} value={userMobile} placeholder="enter " title="Error Message" pattern="[1-9]{1}[0-9]{9}" />
                 <input type="number" className="form-control form-control-lg form_data" onChange={(e) => setUserAge(e.target.value)} value={userAge}  placeholder="enter age" />
                 <label htmlFor="Male"> Gender </label> &nbsp; &nbsp; &nbsp;
                 {userGender.map((result,index) => (
                     <div key={index}>
                         <div className="form-check form-check-inline" >
                             {/* <input className="form-check-input"  type="radio" onChange={(e) => setUserGender(e.target.value)}  name="exampleRadios"  value={result}  /> */}
-                            <input className="form-check-input"  type="radio" onChange={onRadioChangeHandler} checked={checkGender.checked} name="exampleRadios"  value={result}  />
+                            <input className="form-check-input"  type="radio" onChange={onRadioChangeHandler} checked={checkGender.checked} name="exampleRadios"  value={result.userGender}  />
                             <label className="form-check-label" htmlFor={result}>
                                 {result}
                             </label>

@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
-import Select from "react-select";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { DropdownButton,Dropdown } from 'react-bootstrap';
 const Form = (props) => {
-    let gender= ['Male','Female','Other'] ;
+    let gender= [{id:1,gn:'Male'},{id:2,gn:'Female'},{id:3,gn:'Other'}] ;
     let hobby = [{id:1,hobbyName:'Cricket'} , {id:2,hobbyName:'Footbal'}, {id:3,hobbyName:'Reading'} , {id:4,hobbyName:'Researching'}];
     let countryList = [{value:1,label:'India'}, {value:2,label:'Australia'}, {value:3,label:'Germany'}, {value:4,label:'Russia'}, {value:5,label:'United States of America'} , {value:6,label:'United Kingdom'}]
 
@@ -14,29 +15,37 @@ const Form = (props) => {
     const [userMobile,setUserMobile] =useState('');
     const [userAge,setUserAge] =useState('');
     const [userGender,setUserGender] =useState('');
-    const [checkGender,setCheckGender] =useState(false);
-    const [userHobby,setUserHobby] = useState([]);
+    const [checkBoxVal,setCheckBoxVal] = useState([]);
    
-    const [userCountry,setUserCountry] = useState(countryList[0]);
+    const [userCountry,setUserCountry] = useState(countryList[0].label);
     const [userPassword,setUserPassword] = useState('');
 
-    
- 
-    const onRadioChangeHandler =(e) =>{
-        
-        if(checkGender !== e.target.checked){
-            console.log(e.target.checked);
-            console.log(e.target.value);
-            setCheckGender(e.target.checked);
-            setUserGender(e.target.value);
+    const checkBoxHandler = (checkValue,checked) =>{
+        let isValid = checked;
+        if(isValid){
+            setCheckBoxVal((prevValue)=>{
+                return [ ...prevValue , checkValue ];
+            });
         }
+        else{
+            if(checkBoxVal.includes(checkValue)){
+                let newArray = checkBoxVal.filter((val)=>{
+                    console.log("hiiii value", val , " ::: " ,val !== checkValue);
+                    return val !== checkValue;
+                });
+                setCheckBoxVal([...newArray])
+            }
+        }
+        
     }
-    
-   const submitHandler =(e) =>{
+
+    const genderChangeHandler = (event) =>{
+        // console.log(event.target.value);
+        setUserGender(event.target.value)
+    }
+
+    const submitHandler =(e) =>{
         e.preventDefault();
-        console.log(userGender);
-
-
 
         const allData = {
             name: userName,
@@ -44,15 +53,15 @@ const Form = (props) => {
             mobileNo : userMobile,
             age: userAge,
             gender: userGender,
-            hobby: userHobby,
+            hobby: checkBoxVal,
             country: userCountry,
             password: userPassword,
         }
 
-        if(userName === '' || userEmail==="" || userMobile==='' ||userAge=== '' || userGender==='' || userHobby==='' || userCountry === '' || userPassword === ''){
-           alert('plese Enter Value');
-    }
-    else{
+    //     if(userName === '' || userEmail==="" || userMobile==='' ||userAge=== '' || userGender==='' || checkBoxVal==='' || userCountry === '' || userPassword === ''){
+    //        alert('plese Enter Value');
+    // }
+    // else{
 
         props.data(allData);
     
@@ -61,32 +70,16 @@ const Form = (props) => {
     setUserMobile('');
     setUserAge('');
     setUserCountry('');
+  
     setUserGender('');
-    setCheckGender(false);
-    setUserHobby('');
+    setCheckBoxVal([]);
     
     setUserPassword('');
     
-   }
+//    }
    
    }
-   const ddlHandler = (e) => {
-        console.log(e.label)
-    setUserCountry(e.label);
-}
-   const getHobbi = (e) =>{
-       let temp_data = userHobby;
-       let index_value = temp_data.indexOf(e.target.value);
 
-       if(temp_data.includes(e.target.value)){
-           temp_data.splice(index_value,1);
-           setUserHobby(temp_data);
-       }
-       else{
-           temp_data.push(e.target.value);
-           setUserHobby(temp_data);
-       }
-   }
 
 
     return (
@@ -95,33 +88,46 @@ const Form = (props) => {
                 <input className="form-control form-control-lg form_data"  type="text" onChange={(e) => setUserName(e.target.value)} value={userName} placeholder="Add User Name" />
                 <input className="form-control form-control-lg form_data"  type="email" onChange={(e) => setUserEmail(e.target.value)} value={userEmail} placeholder="Add User Email" />
                
-                <input type="tel" className="form-control form-control-lg form_data" onChange={(e) => setUserMobile(e.target.value)} value={userMobile} placeholder="enter your name" title="Error Message" pattern="[1-9]{1}[0-9]{9}" />
+                <input type="tel" className="form-control form-control-lg form_data" onChange={(e) => setUserMobile(e.target.value)} value={userMobile} placeholder="enter your Phone " title="Error Message" pattern="[1-9]{1}[0-9]{9}" />
                 <input type="number" className="form-control form-control-lg form_data" onChange={(e) => setUserAge(e.target.value)} value={userAge}  placeholder="enter age" />
                 <label htmlFor="Male"> Gender </label> &nbsp; &nbsp; &nbsp;
-                {gender.map((result,index) => (
-                    <div key={index}>
-                        <div className="form-check form-check-inline" >
-                            {/* <input className="form-check-input"  type="radio" onChange={(e) => setUserGender(e.target.value)}  name="exampleRadios"  value={result}  /> */}
-                            <input className="form-check-input"  type="radio" onChange={onRadioChangeHandler} checked={checkGender.checked} name="exampleRadios"  value={result}  />
-                            <label className="form-check-label" htmlFor={result}>
-                                {result}
+                
+                {gender.map((val)=>(
+                    <div className="form-check form-check-inline" key={val.id}>
+                        <input className="form-check-input"  type="radio" checked={userGender === val.gn} onChange={genderChangeHandler} name="exampleRadios" value={val.gn}  />
+                            <label className="form-check-label" htmlFor={val.gn}>
+                                {val.gn}
                             </label>
-                        </div>
                     </div>
                 ))}
+        
                 <br />
                 <br/>
                 <label> Hobby </label> &nbsp; &nbsp; &nbsp;
                 
-                {hobby.map((result,index) => (
-                    <div className="form-check form-check-inline" key={index}>
-                        <input className="form-check-input" type="checkbox" onChange={e=>getHobbi(e)} name={result.hobbyName} value={result.hobbyName} />
-                        <label className="form-check-label" htmlFor={result}>{result.hobbyName}</label>
-                    </div>
-                ))}
+                {hobby.map((val)=>(
+                        <div className="form-check form-check-inline" key={val.id}>
+                            <input className="form-check-input" type="checkbox" checked={checkBoxVal.includes(val.hobbyName)?true:false} onChange={e=>checkBoxHandler(e.target.value,e.target.checked)} name={val.hobbyName} value={val.hobbyName} />
+                            <label className="form-check-label" htmlFor={val}>{val.hobbyName}</label>
+                        </div>
+                    ))}
                 <div className="form-group col-md-12">
-                    <Select options={countryList}  className="form-control" defaultValue={countryList[0]} onChange={ddlHandler}/>
-                  
+                    {/* <Select options={countryList}  className="form-control" defaultValue={countryList[0]} onChange={ddlHandler}/> */}
+                    {/* <select className="form-select" >
+                       {countryList.map((val)=>(
+                           
+                           <option title={val.id}>{val.label}</option>
+                      
+                       ))}
+                    </select> */}
+                    <DropdownButton id="dropdown-basic-button" onClick={e=> setUserCountry(e.target.title)} title="Select Country">
+                    {countryList.map((val,index)=>(
+                           
+                           <Dropdown.Item value={val.label} title={val.label} key={index}>{val.label}</Dropdown.Item>
+                      
+                       ))}
+                        
+                    </DropdownButton>
                 </div>
                 <input type="password" className="form-control form-control-lg form_data" onChange={e => setUserPassword(e.target.value)} value={userPassword} id="inputPassword" placeholder="Password"></input>
                 <button type="text" className="btn btn-outline-success button">Add User Details</button>
